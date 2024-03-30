@@ -11,11 +11,11 @@ def main():
     flattenedTags = pd.json_normalize(rawdata['tags'])
     rawdata = pd.concat([rawdata.drop(columns='tags'), flattenedTags], axis=1)
 
-    # Data Set 1: Get the rows with the "wikipedia" key in the tag object
-    wikipedia_key_data = rawdata.dropna(subset=['wikipedia'])
+    # Data Set 1: Get the rows with the "wikidata" key in the tag object
+    wikidata_key_data = rawdata.dropna(subset=['wikidata'])
     # Remove the columns with NaN
-    wikipedia_key_data = wikipedia_key_data.dropna(axis=1)
-    wikipedia_key_data.to_csv('wikipedia_key_data.csv')
+    wikidata_key_data = wikidata_key_data.dropna(axis=1)
+    wikidata_key_data.to_csv('wikidata_key_data.csv')
 
     # Data Set 2: Get the rows with the "tourism":"attraction" in the tags (only 3 rows) or, just get all of the rows with the "tourism" key in the tags
 
