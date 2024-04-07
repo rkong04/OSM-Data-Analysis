@@ -1,13 +1,4 @@
 import pandas as pd
-from fuzzywuzzy import fuzz
-
-def isChainName(name, chainNames):
-    for chainName in chainNames:
-        similarity_score = fuzz.ratio(str(name), chainName)
-        if(similarity_score > 80):
-            return True
-    else:
-        return False
 
 
 def main():
@@ -51,20 +42,24 @@ def main():
     # get unique chains by dropping duplicates
     uniqueChains = chain.drop_duplicates(subset=['name'])
     uniqueChains = uniqueChains[['name', 'brand:wikidata']]
-    uniqueChainNames = set(uniqueChains['name'])
 
-    # check each row's name matches to one of the chains
-    indep['is_chain'] = indep['name'].apply(isChainName, args=([uniqueChainNames]))
-    # move the chains into new data frames
-    chains_from_indep = indep[indep['is_chain'] == True]
-    indep = indep[indep['is_chain'] == False]
-
+    # inner join the unique chains into the indep df
+    chains_from_indep = pd.merge(indep, uniqueChains, on='name', how='inner')
+    # after the join, the brand:wikidata from uniqueChains got added as a new series called brand:wikidata_y. Rename it to brand:wikidata.
+    chains_from_indep = chains_from_indep.rename(columns={'brand:wikidata_y': 'brand:wikidata'})
     # keep only the necessary columns and append into chain df
     chains_from_indep = chains_from_indep[['lat','lon','timestamp','amenity','name','brand:wikidata','cuisine','brand']]
     chain = chain._append(chains_from_indep, ignore_index=True)
 
+    # remove chains from the indep df
+    uniqueChainNames = set(uniqueChains['name'])
+    indep = indep[~indep['name'].isin(uniqueChainNames)]
+
     indep.to_csv("independent_restaurant.csv")
     chain.to_csv("chain_restaurants.csv")
+
+
+
 
 
 if __name__=='__main__':
