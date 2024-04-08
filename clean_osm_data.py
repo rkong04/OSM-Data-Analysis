@@ -38,8 +38,8 @@ def main():
 
     #Data Set 2: Get the rows with "wikidata" key in the tag object
     wikidata_key_data = rawdata.dropna(subset=['brand:wikidata'])
-    # Remove the columns with NaN
-    wikidata_key_data = wikidata_key_data.dropna(axis=1)
+    # Remove the columns where all entries are NaN
+    wikidata_key_data = wikidata_key_data.dropna(axis=1, how='all')
     #use to find amenities but can be subset with names for known locations
     wikidata_key_data.to_csv('wikidata_key_data.csv')
 
@@ -49,6 +49,25 @@ def main():
     tour_key_data = tourism.dropna(axis=1)
     tour_key_data = tour_key_data[tour_key_data['tourism'] != 'information']
     tour_key_data.to_csv("tourism.csv")
+
+    # Data Set 3 Part 2: Tourism, but another version
+    # tags: 'is_in:city', 'wikidata', 'ferry', 'tourism', 'wikipedia', 'guide'
+    is_in_city = rawdata.dropna(subset=['is_in:city'])
+    wikidata = rawdata.dropna(subset=['wikidata'])
+    ferry = rawdata.dropna(subset=['ferry'])
+    tourism = rawdata.dropna(subset=['tourism'])
+    wikipedia = rawdata.dropna(subset=['wikipedia'])
+    guide = rawdata.dropna(subset=['guide'])
+
+    # combine these three data frames together
+    tourism_test_df = is_in_city._append(wikidata, ignore_index=True)
+    tourism_test_df = tourism_test_df._append(ferry, ignore_index=True)
+    tourism_test_df = tourism_test_df._append(tourism, ignore_index=True)
+    tourism_test_df = tourism_test_df._append(wikipedia, ignore_index=True)
+    tourism_test_df = tourism_test_df._append(guide, ignore_index=True)
+    tourism_test_df = tourism_test_df.drop_duplicates()
+    tourism_test_df = tourism_test_df.dropna(how='all', axis=1)
+    tourism_test_df.to_csv('tourismtwo.csv')
 
     # Data Set 4: get all chained and independently owned restaurants
     chain = rawdata.dropna(subset=['brand:wikidata','cuisine'])
@@ -78,7 +97,7 @@ def main():
 
     indep.to_csv("independent_restaurant.csv")
     chain.to_csv("chain_restaurants.csv")
-
+    # end of Data Set 4 --
 
 if __name__=='__main__':
     main()
