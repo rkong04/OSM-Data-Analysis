@@ -11,6 +11,17 @@ def main():
     flattenedTags = pd.json_normalize(rawdata['tags'])
     rawdata = pd.concat([rawdata.drop(columns='tags'), flattenedTags], axis=1)
 
+    # rawdata.to_csv('rawdata.csv')
+    # Experimentation, creating a bunch of csvs of the different tags:
+    # tags = ['is_in:city', 'wikidata', 'public_transport', 'ferry', 'shop', 'historic', 'memorial', 'entrance', 'sport', 'bicycle_parking', 'smoking', 'image', 'tourism', 'ferry_terminal', 'wikipedia:en', 'old_name', 'name:fr', 'category', 'artist_name', 'bar', 'brewery', 'wikipedia', 'artwork_type', 'guide', 'operator:wikidata', 'operator:wikipedia', 'socket:tesla_supercharger:output']
+
+    # for tag in tags:
+    #     current_tag_data = rawdata.dropna(subset=[tag])
+    #     current_tag_data.to_csv(tag + '.csv')
+
+    # Data Set 0: Data Set for tourist attractions
+    # good_tags = ['is_in:city', 'wikidata', 'ferry', 'tourism', 'wikipedia', 'guide']
+
     # Data Set 1: Get the rows with the "brand:wikipedia" key in the tag object
     wikipedia_key_data = rawdata.dropna(subset=['brand:wikipedia'])
     # Remove the columns with NaN
@@ -57,7 +68,6 @@ def main():
 
     indep.to_csv("independent_restaurant.csv")
     chain.to_csv("chain_restaurants.csv")
-
 
 
 
