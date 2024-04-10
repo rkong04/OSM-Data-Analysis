@@ -5,10 +5,7 @@ from sklearn.cluster import KMeans
 from sklearn.cluster import DBSCAN
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.cluster import AffinityPropagation
-
-
-chain = pd.read_csv('chain_restaurants.csv')
-indep = pd.read_csv('independent_restaurant.csv')
+import sys
 
 
 #creates a png with a side by side of the clusterings of restaurants for chain vs independent
@@ -41,37 +38,50 @@ def showClustering(chain,indep,clusterType):
 
 
 #given two models, fit and predict the clustering for indep and chain restaurants
-def fit_model(chain_model,indep_model,name):
+def fit_model(chain_model,indep_model,name,chain,indep):
     chain_cluster = chain_model.fit_predict(chain[['lat','lon']])
     indep_cluster = indep_model.fit_predict(indep[['lat','lon']])
     chain['cluster'] = chain_cluster
     indep['cluster'] = indep_cluster
     showClustering(chain,indep,name)
-   
-#KMeans
-model1 = KMeans(n_clusters = 20)
-model2 = KMeans(n_clusters = 20)
-fit_model(model1,model2,"KMeans")
 
-#Affinity 
-Afmodel1 = AffinityPropagation(random_state=None)
-Afmodel2 = AffinityPropagation(random_state=None)
-fit_model(Afmodel1,Afmodel2,"Affinity")
+def main(chain_data,indep_data):
 
-#Agglomerative
-Agmodel1 = AgglomerativeClustering(n_clusters = 20)
-Agmodel2 = AgglomerativeClustering(n_clusters = 20)
-fit_model(Agmodel1,Agmodel2,"Agglomerative")
+  chain = pd.read_csv(chain_data)
+  indep = pd.read_csv(indep_data)
+    
+  #KMeans
+  model1 = KMeans(n_clusters = 20)
+  model2 = KMeans(n_clusters = 20)
+  fit_model(model1,model2,"KMeans",chain,indep)
 
-#DBSCAN
-chain_coord = chain[['lat','lon']].values
-indep_coord = indep[['lat','lon']].values
-eps = 1/6371    #1km radius 
-db = DBSCAN(eps=eps,min_samples=5, algorithm='ball_tree', metric='haversine').fit_predict(np.radians(chain_coord))  #need to convert to radians to find distances using haversine
-db2 = DBSCAN(eps=eps,min_samples=5, algorithm='ball_tree', metric='haversine').fit_predict(np.radians(indep_coord))
-chain['cluster'] = db
-indep['cluster'] = db2
+  #Affinity 
+  Afmodel1 = AffinityPropagation(random_state=None)
+  Afmodel2 = AffinityPropagation(random_state=None)
+  fit_model(Afmodel1,Afmodel2,"Affinity",chain,indep)
 
-chain_filtered = chain[chain['cluster'] != -1]
-indep_filtered = indep[indep['cluster'] != -1] #remove noise (points where there werent at least min_samples amount of other restuarants within eps(1km))
-showClustering(chain_filtered,indep_filtered,"DBSCAN")
+  #Agglomerative
+  Agmodel1 = AgglomerativeClustering(n_clusters = 20)
+  Agmodel2 = AgglomerativeClustering(n_clusters = 20)
+  fit_model(Agmodel1,Agmodel2,"Agglomerative",chain,indep)
+
+  #DBSCAN
+  chain_coord = chain[['lat','lon']].values
+  indep_coord = indep[['lat','lon']].values
+  eps = 1/6371    #1km radius 
+  db = DBSCAN(eps=eps,min_samples=5, algorithm='ball_tree', metric='haversine').fit_predict(np.radians(chain_coord))  #need to convert to radians to find distances using haversine
+  db2 = DBSCAN(eps=eps,min_samples=5, algorithm='ball_tree', metric='haversine').fit_predict(np.radians(indep_coord))
+  chain['cluster'] = db
+  indep['cluster'] = db2
+
+  chain_filtered = chain[chain['cluster'] != -1]
+  indep_filtered = indep[indep['cluster'] != -1] #remove noise (points where there werent at least min_samples amount of other restuarants within eps(1km))
+  showClustering(chain_filtered,indep_filtered,"DBSCAN")
+
+  chain.to_csv('visual-dataframes\chain.csv')
+  indep.to_csv('visual-dataframes\indep.csv')
+
+if __name__ == '__main__':
+    chain = sys.argv[1]
+    indep = sys.argv[2]
+    main(chain,indep)
