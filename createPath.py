@@ -10,10 +10,12 @@ def get_gps_coordinates(image_path):
         exif_data = img._getexif()
 
         if not exif_data:
+            print(f"No EXIF data found in {image_path}")
             return None
 
         gps_info = exif_data.get(34853)
         if not gps_info:
+            print(f"No GPS data found in {image_path}")
             return None
 
         def convert_to_degrees(value):
