@@ -33,7 +33,7 @@ def showClustering(chain,indep,clusterType):
   ax[1].set_ylabel('Latitude')
   ax[1].grid(True)
 
-  name = "Images\\" + clusterType + ".png"
+  name = "./Images/" + clusterType + ".png"
   plt.savefig(name)
 
 
@@ -45,10 +45,10 @@ def fit_model(chain_model,indep_model,name,chain,indep):
     indep['cluster'] = indep_cluster
     showClustering(chain,indep,name)
 
-def main(chain_data,indep_data):
+def main():
 
-  chain = pd.read_csv(chain_data)
-  indep = pd.read_csv(indep_data)
+  chain = pd.read_csv('./datasets/chain_restaurants.csv')
+  indep = pd.read_csv('./datasets/independent_restaurants.csv')
     
   #KMeans
   model1 = KMeans(n_clusters = 20)
@@ -78,10 +78,8 @@ def main(chain_data,indep_data):
   indep_filtered = indep[indep['cluster'] != -1] #remove noise (points where there werent at least min_samples amount of other restuarants within eps(1km))
   showClustering(chain_filtered,indep_filtered,"DBSCAN")
 
-  chain.to_csv('visual-dataframes\chain.csv')
-  indep.to_csv('visual-dataframes\indep.csv')
+  chain.to_csv('./datasets/chain_cluster.csv')
+  indep.to_csv('./datasets/indep_cluster.csv')
 
 if __name__ == '__main__':
-    chain = sys.argv[1]
-    indep = sys.argv[2]
-    main(chain,indep)
+    main()
