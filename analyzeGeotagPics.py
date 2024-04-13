@@ -7,6 +7,8 @@ import requests
 import gpxpy
 import gpxpy.gpx
 import polyline
+import webbrowser
+import folium
 #import osmnx as ox
 #import networkx as nx
 #import geopandas as gpd
@@ -127,7 +129,7 @@ def create_gpx_file(coordinates, filename="straightPath.gpx"):
 
     with open(filename, "w") as f:
         f.write(doc.toprettyxml(indent="  "))
-
+    display_gpx_on_map('straightPath.gpx')
 
 def create_gpx(coordinates):
     gpx = gpxpy.gpx.GPX()
@@ -160,6 +162,9 @@ def create_gpx(coordinates):
 
     with open('optimizedPath.gpx', 'w') as file:
         file.write(gpx.to_xml())
+    display_gpx_on_map('optimizedPath.gpx')
+
+    
 
 def process_folder(folder_path):
     image_files = [f for f in os.listdir(folder_path) if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
@@ -188,6 +193,24 @@ def save_unique_attractions_to_file(attractions, filename='unique_attractions.tx
         for attraction in sorted(all_attractions):
             file.write(f"{attraction}\n")
 
+def display_gpx_on_map(gpx_path):
+    with open(gpx_path, 'r') as gpx_file:
+        gpx = gpxpy.parse(gpx_file)
+
+    start_lat = gpx.tracks[0].segments[0].points[0].latitude
+    start_lon = gpx.tracks[0].segments[0].points[0].longitude
+
+    my_map = folium.Map(location=[start_lat, start_lon], zoom_start=14)
+
+    for track in gpx.tracks:
+        for segment in track.segments:
+            points = [(point.latitude, point.longitude) for point in segment.points]
+            folium.PolyLine(points, color="red", weight=2.5, opacity=1).add_to(my_map)
+
+    my_map.save('gpx_display_map.html')
+
+    
+    webbrowser.open('gpx_display_map.html', new=2)
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Failed input, please try: python analyzeGeotagPics.py folderName")
