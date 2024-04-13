@@ -8,7 +8,8 @@ When traveling through the city, there could be a lot of attractions or sites  t
 # 2. Instructions
 pip3 install fuzzywuzzy
 
-Part B: Pictures and Geodata \n
+Part B: Pictures and Geodata 
+
 Most imported libraries are standard Python libraries, but not all. Some need to be installed.
 
 - pip install Requests
