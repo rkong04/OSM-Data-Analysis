@@ -3,35 +3,42 @@
 
 
 # 1. Defining the Problem
+Part A: Restaurants
 
+Vancouver has a lot of restaurant options available wherever you are.There are staple chains known across the world but also restaurants home to only Vancouver. The goal is to analyze restaurant data using various clustering and regression models to visualize the statistics and densities of restaurants across Vancouver. 
 
 Part B: Pictures and Geodata
 
 When traveling through the city, there could be a lot of attractions or sites  that you miss since you did not see them or they were nearby unbeknownst to you. You also probably do not remember exactly what streets you were walking and only have some pictures to remember the  trip. It would be nice if you could see all the stuff you might have missed or were supposed to see and how you might have traveled from picture to picture.
 
-# 2. Instructions
-pip3 install fuzzywuzzy
+# 2. Run Instructions
+Libraries:  
+pip3 install fuzzywuzzy pandas numpy matplotlib scikit-learn  
+pip3 install Request gpxpy polyline folium pillow  
 
-Part B: Pictures and Geodata 
+Order of execution:  
 
-Most imported libraries are standard Python libraries, but not all. Some need to be installed.
+Part A: Restaurants  
+python3 clean_osm_data.py  
+python3 restaurant_analysis.py  
+python3 clusters.py  
 
-- pip install Requests
-- pip install gpxpy
-- pip install polyline
-- pip install folium
-- pip install pillow
+Part B: Pictures and Geodata   
+The program itself is all contained in analyzeGeotagPics.py  
 
-The program itself is all contained in analyzeGeotagPics.py
-
-example cmd line:
-
-python analyzeGeotagPics.py geotaggedEx
-
-python analyzeGeotagPics.py any_folder_name
+example cmd line:  
+python analyzeGeotagPics.py geotaggedEx  
+python analyzeGeotagPics.py any_folder_name  
 
 
-# 3. Data
+# 3. Data  
+Part A: Restaurants 
+
+files used in restaurant_analysis.py and clusters.py are:  
+- datasets/chain_restaurants.csv
+- datasets/independent_restaurants.csv
+  
+These CSV files are produced using clean_osm_data.py 
 
 Part B: Pictures and Geodata
 
@@ -42,6 +49,24 @@ The program takes a folder of pictures,  even if it is just one picture,  so you
 The folder input also technically takes a path, but for your own sanity and the program's effectiveness, just keep all picture folders in the same directory as the Python file.
 
 # 4. Output
+Part A: Restaurants   
+restaurant_analysis.py produces:
+- datasets/city_population_chain_count.csv, a CSV file with chain count predictions
+- Images/plotOfChainCounts.jpg  
+- Images/plotOfChainsPerCity.jpg  
+- Images/numOfChainsVsPopulation.jpg  
+
+clusters.py produces:  
+  
+datasets/chain_cluster.csv -updated  
+datasets/indep_cluster.csv -updated   
+These two datasets can be put in Google My Maps to visual the chain vs independent restaurants 
+  
+- Images/Affinity.png  
+- Images/Agglomerative.png  
+- Images/DBSCAN.png  
+- Images/KMeans.png  
+
 
 Part B: Pictures and Geodata
 - straightPath.gpx, the gpx file, draws a straight line from point to point
