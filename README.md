@@ -21,7 +21,9 @@ Most imported libraries are standard Python libraries, but not all. Some need to
 The program itself is all contained in analyzeGeotagPics.py
 
 example cmd line:
+
 python analyzeGeotagPics.py geotaggedEx
+
 python analyzeGeotagPics.py any_folder_name
 
 
