@@ -1,4 +1,7 @@
 # CMPT353-Project
+*SorrowfulExistence is cla447/Ryan Lai
+
+
 # 1. Defining the Problem
 
 
