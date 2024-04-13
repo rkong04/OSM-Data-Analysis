@@ -64,7 +64,7 @@ def find_nearby_attractions(latitude, longitude):
     params = {
         'location': f'{latitude},{longitude}',
         'radius': 1000,
-        'keyword': 'point of interest|historical site|tourist_attraction',
+        'keyword': 'point of interest|historical site|tourist attraction',
         'key': API_KEY
     }
     res = requests.get(endpoint_url, params=params)
@@ -179,6 +179,14 @@ def accumulate_and_print_unique_attractions(attractions_dict):
         all_attractions.update(nearby_attractions)
     print('Overall, you were nearby or should have passed:', all_attractions)
 
+def save_unique_attractions_to_file(attractions, filename='unique_attractions.txt'):
+    all_attractions = set()
+    for nearby_attractions in attractions.values(): 
+        all_attractions.update(nearby_attractions)
+    
+    with open(filename, 'w') as file:
+        for attraction in sorted(all_attractions):
+            file.write(f"{attraction}\n")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -186,6 +194,7 @@ if __name__ == "__main__":
         sys.exit(1)
     folder_path = sys.argv[1]
     attractions = process_images_and_find_attractions(folder_path)
+    save_unique_attractions_to_file(attractions)
     coordinates = process_folder(folder_path)
 
     for location, nearby_attractions in attractions.items():
