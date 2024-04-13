@@ -61,7 +61,17 @@ def interpolate_points(p1, p2, interval=1000): #in meters btw
         points.append((lat, lon))
     return points
 
-def find_nearby_attractions(latitude, longitude):
+def fetch_place_details(place_id):
+    details_url = "https://maps.googleapis.com/maps/api/place/details/json"
+    params = {
+        'place_id': place_id,
+        'fields': 'user_ratings_total',
+        'key': API_KEY
+    }
+    response = requests.get(details_url, params=params)
+    return response.json()
+
+"""def find_nearby_attractions(latitude, longitude):
     endpoint_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
     params = {
         'location': f'{latitude},{longitude}',
@@ -76,6 +86,26 @@ def find_nearby_attractions(latitude, longitude):
         for place in results['results']:
             if place['name'] not in attractions:
                 attractions.append(place['name'])
+    return attractions"""
+
+def find_nearby_attractions(latitude, longitude):
+    endpoint_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+    params = {
+        'location': f'{latitude},{longitude}',
+        'radius': 1000,
+        'keyword': 'point of interest|historical site|tourist attraction',
+        'key': API_KEY
+    }
+    res = requests.get(endpoint_url, params=params)
+    results = res.json()
+    attractions = []
+    min_reviews = 50
+    if 'results' in results:
+        for place in results['results']:
+            details = fetch_place_details(place['place_id'])
+            if details.get('result', {}).get('user_ratings_total', 0) >= min_reviews:
+                if place['name'] not in attractions:
+                    attractions.append(place['name'])
     return attractions
 
 def process_images_and_find_attractions(folder_path):
