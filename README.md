@@ -31,7 +31,7 @@ python analyzeGeotagPics.py any_folder_name
 
 Part B: Pictures and Geodata
 
-There is a provided folder of arbitrary example pictures with geotags, but the idea is that you can use any pictures you want if they are geotagged. Only png, jpg, and jpeg files accepted. 
+There is a provided folder of arbitrary example pictures with geotags, but the idea is that you can use any pictures you want if they are geotagged. Only png, jpg, and jpeg files accepted. For this project, geoimgr.com was used to artificially geotag pictures, but in theory, a user should have photos that are already geotagged on their phone hopefully. 
 
 The program takes a folder of pictures,  even if it is just one picture,  so you can have multiple folders of pictures for your own organization in the same directory as the Python file, but you can only run one folder.
 
@@ -40,7 +40,6 @@ The folder input also technically takes a path, but for your own sanity and the 
 # 4. Output
 
 Part B: Pictures and Geodata
-- cmd line outputs
 - straightPath.gpx, the gpx file, draws a straight line from point to point
 - optimizedPath.gpx, uses Directions API to form a realistic street route
 - gpx_display_map.html, runs once for each of the above GPXs to display the GPX in web format, but for tech savvy people you should probably just use a GPX viewer to colour the routes
