@@ -3,6 +3,7 @@
 
 
 Part B: Pictures and Geodata
+
 When traveling through the city, there could be a lot of attractions or sites  that you miss since you did not see them or they were nearby unbeknownst to you. You also probably do not remember exactly what streets you were walking and only have some pictures to remember the  trip. It would be nice if you could see all the stuff you might have missed or were supposed to see and how you might have traveled from picture to picture.
 
 # 2. Instructions
