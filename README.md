@@ -8,14 +8,14 @@ When traveling through the city, there could be a lot of attractions or sites  t
 # 2. Instructions
 pip3 install fuzzywuzzy
 
-Part B: Pictures and Geodata
+Part B: Pictures and Geodata \n
 Most imported libraries are standard Python libraries, but not all. Some need to be installed.
 
-pip install Requests
-pip install gpxpy
-pip install polyline
-pip install folium
-pip install pillow
+- pip install Requests
+- pip install gpxpy
+- pip install polyline
+- pip install folium
+- pip install pillow
 
 The program itself is all contained in analyzeGeotagPics.py
 
