@@ -71,23 +71,6 @@ def fetch_place_details(place_id):
     response = requests.get(details_url, params=params)
     return response.json()
 
-"""def find_nearby_attractions(latitude, longitude):
-    endpoint_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
-    params = {
-        'location': f'{latitude},{longitude}',
-        'radius': 1000,
-        'keyword': 'point of interest|historical site|tourist attraction',
-        'key': API_KEY
-    }
-    res = requests.get(endpoint_url, params=params)
-    results = res.json()
-    attractions = []
-    if 'results' in results:
-        for place in results['results']:
-            if place['name'] not in attractions:
-                attractions.append(place['name'])
-    return attractions"""
-
 def find_nearby_attractions(latitude, longitude):
     endpoint_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
     params = {
